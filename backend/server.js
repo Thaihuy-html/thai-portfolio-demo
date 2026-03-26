@@ -6,14 +6,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-let posts = [];
+let posts = []; // ✅ chỉ 1 dòng này
 
-// test root
 app.get("/", (req, res) => {
   res.send("Backend OK");
 });
 
-// ✅ QUAN TRỌNG: API posts
 app.get("/api/posts", (req, res) => {
   res.json(posts);
 });
@@ -36,26 +34,4 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log("Server chạy " + PORT);
-});
-
-let posts = [];
-
-// lấy danh sách bài
-app.get("/api/posts", (req, res) => {
-  res.json(posts);
-});
-
-// đăng bài
-app.post("/api/posts", (req, res) => {
-  const { title, content } = req.body;
-
-  const newPost = {
-    id: Date.now(),
-    title,
-    content,
-  };
-
-  posts.push(newPost);
-
-  res.json({ success: true });
 });
