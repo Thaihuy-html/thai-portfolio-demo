@@ -8,12 +8,10 @@ app.use(express.json());
 
 let posts = [];
 
-// test root
 app.get("/", (req, res) => {
-  res.send("Server OK");
+  res.send("Backend OK");
 });
 
-// 👉 API posts
 app.get("/api/posts", (req, res) => {
   res.json(posts);
 });
@@ -35,9 +33,5 @@ app.post("/api/posts", (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log("Server chạy port " + PORT);
-});
-
-app.get("/api/test", (req, res) => {
-  res.send("API OK");
+  console.log("Server chạy " + PORT);
 });
