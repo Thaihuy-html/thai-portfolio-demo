@@ -8,7 +8,16 @@ app.use(express.json());
 
 let posts = [];
 
-// 👉 API nhận bài từ Coze
+// test root
+app.get("/", (req, res) => {
+  res.send("Server OK");
+});
+
+// 👉 API posts
+app.get("/api/posts", (req, res) => {
+  res.json(posts);
+});
+
 app.post("/api/posts", (req, res) => {
   const { title, content } = req.body;
 
@@ -20,14 +29,11 @@ app.post("/api/posts", (req, res) => {
 
   posts.push(newPost);
 
-  console.log("Bài mới:", newPost);
-
   res.json({ success: true });
 });
 
-// 👉 API trả bài cho React
-app.get("/api/posts", (req, res) => {
-  res.json(posts);
-});
+const PORT = process.env.PORT || 5000;
 
-app.listen(5000, () => console.log("Server chạy"));
+app.listen(PORT, () => {
+  console.log("Server chạy port " + PORT);
+});
