@@ -37,3 +37,25 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log("Server chạy " + PORT);
 });
+
+let posts = [];
+
+// lấy danh sách bài
+app.get("/api/posts", (req, res) => {
+  res.json(posts);
+});
+
+// đăng bài
+app.post("/api/posts", (req, res) => {
+  const { title, content } = req.body;
+
+  const newPost = {
+    id: Date.now(),
+    title,
+    content,
+  };
+
+  posts.push(newPost);
+
+  res.json({ success: true });
+});
