@@ -8,10 +8,12 @@ app.use(express.json());
 
 let posts = [];
 
+// test root
 app.get("/", (req, res) => {
   res.send("Backend OK");
 });
 
+// ✅ QUAN TRỌNG: API posts
 app.get("/api/posts", (req, res) => {
   res.json(posts);
 });
