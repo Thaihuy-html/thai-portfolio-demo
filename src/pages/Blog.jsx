@@ -1,28 +1,28 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-// 1. IMPORT TẤT CẢ CÁC HÌNH ẢNH TỪ THƯ MỤC ASSETS
-// Thái nhớ kiểm tra tên file trong assets có đúng là solar5.jpg, solar2.jpg... không nhé
 import imgSolar5 from '../assets/solar5.jpg'; 
 import imgSolar2 from '../assets/solar2.jpg';
 
 const Blog = () => {
-  // 2. CẬP NHẬT MẢNG POSTS: Thay link Unsplash bằng các biến đã import ở trên
-  const posts = [
-    { 
-      id: 1, 
-      title: "Kỹ thuật lắp đặt Inverter tiết kiệm diện tích", 
-      desc: "Làm thế nào để bố trí hệ thống biến tần tối ưu cho các hộ gia đình và doanh nghiệp nhằm đảm bảo hiệu suất cao nhất...", 
-      date: "22/03/2026", 
-      img: imgSolar5 // Thay tấm hình lỗi bằng solar5.jpg
-    },
-    { 
-      id: 2, 
-      title: "Quy trình bảo trì tấm pin mặt trời định kỳ", 
-      desc: "Hướng dẫn các bước vệ sinh và kiểm tra hiệu suất pin định kỳ hàng năm giúp tăng tuổi thọ và độ bền cho hệ thống...", 
-      date: "20/03/2026", 
-      img: imgSolar2 // Dùng hình solar2 cho bài viết thứ hai
-    },
-  ];
+  // 1. Tạo trạng thái để lưu danh sách bài viết
+  const [posts, setPosts] = useState([]);
+
+  // 2. Hàm lấy dữ liệu từ Backend
+  useEffect(() => {
+    fetch('https://thai-backend-ph5l.onrender.com/api/posts')
+      .then(response => response.json())
+      .then(data => {
+        // Nếu bài viết từ AI thiếu ảnh hoặc mô tả, chúng ta sẽ gán mặc định cho nó đẹp
+        const formattedData = data.map(post => ({
+          ...post,
+          img: post.image || imgSolar5, // Nếu AI không gửi ảnh, dùng ảnh solar5
+          desc: post.description || post.content.substring(0, 150) + "...", // Cắt ngắn nội dung làm mô tả
+          date: post.date || "Mới nhất"
+        }));
+        setPosts(formattedData);
+      })
+      .catch(error => console.error('Lỗi lấy dữ liệu:', error));
+  }, []);
 
   return (
     <div className="pt-32 pb-20 container mx-auto px-6 min-h-screen bg-[#0a1628]">
@@ -34,18 +34,15 @@ const Blog = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         {posts.map((post) => (
           <div key={post.id} className="group bg-[#112240] rounded-2xl overflow-hidden border border-gray-800 hover:border-[#4ade80]/50 transition-all duration-300 shadow-xl">
-            {/* PHẦN HÌNH ẢNH */}
             <div className="h-64 overflow-hidden relative">
               <img 
-                src={post.img} // React sẽ lấy đường dẫn từ biến đã import
+                src={post.img} 
                 alt={post.title} 
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
               />
-              {/* Lớp phủ tối nhẹ khi chưa hover */}
               <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all"></div>
             </div>
 
-            {/* PHẦN NỘI DUNG */}
             <div className="p-8">
               <p className="text-gray-400 text-sm mb-3 flex items-center gap-2">
                 <span className="w-4 h-[1px] bg-[#4ade80]"></span>
